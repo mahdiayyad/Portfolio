@@ -1,2 +1,3 @@
 # Portfolio
-I want to build a website that everyone can get happy with
+I made a website using HTML, CSS, JS.
+No backend included yet.
