@@ -283,11 +283,9 @@ form.addEventListener("submit", (event) => {
     email: email,
     subject: subject,
     message: message,
-    who: email,
+    who: 'mahdiayyad97@gmail.com',
   };
 
-
-  console.log(form);
   fetch(form.action, {
     method: "POST",
     headers: {
