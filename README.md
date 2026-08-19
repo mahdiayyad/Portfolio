@@ -1,71 +1,53 @@
+<div align="center">
+
 # Mahdi Ayyad — Portfolio
 
-Personal portfolio for Mahdi Ayyad, Senior Laravel Developer & Backend Engineer — built as a real Laravel + React application rather than a static page, since a backend engineer's portfolio doubles as a work sample.
+**Senior Laravel Developer & Backend Engineer**
 
-**Stack:** Laravel 12 + Inertia.js + React 19, SQLite for local dev (MySQL-compatible migrations), Vite.
+[mahdiayyad.dev](https://mahdiayyad.dev)
 
-## Why Laravel + Inertia + React
+![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white)
+![Inertia.js](https://img.shields.io/badge/Inertia.js-3-9553E9?logo=inertia&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)
 
-Inertia lets Laravel controllers return React pages directly — one app, one repo, no separate REST API to maintain for what is fundamentally a single-owner site. It's the same stack Laravel's own official React starter kit uses. The contact form is real: `POST /contact` → validated by a `FormRequest` → persisted via Eloquent → a `ShouldQueue` Mailable dispatched through the queue — not a `mailto:` link.
+</div>
 
-## Project structure
+---
+
+A personal portfolio built as a real, production Laravel + React application rather than a static template — a backend engineer's portfolio should double as a work sample, not just describe one.
+
+## Engineering highlights
+
+- **A real backend, not a mockup.** The contact form is a complete request/response cycle — `FormRequest` validation → Eloquent persistence → a queued `Mailable` sent through [Resend](https://resend.com) — not a `mailto:` link pretending to be a feature.
+- **Data-driven case studies.** Each featured project is an Eloquent model whose `sections` column holds its entire case-study content (`{heading, body}` pairs). `/projects/{slug}` pages are route-model-bound by slug, server-rendered through Inertia, and carry their own SEO metadata and prev/next navigation — not a hardcoded template repeated four times.
+- **Tested.** Feature tests cover contact-form validation, persistence, mail queuing, and rate limiting, plus the case-study routes and their 404 path.
+- **A hand-built design system.** No UI framework — a from-scratch dark/light theme driven entirely by CSS custom properties, scroll-reveal and count-up animations via small custom React hooks, and a single inline SVG icon sprite (zero icon-font dependency).
+- **Portable by design.** Every migration uses framework-native column types (`string`, `text`, `json`, `boolean`) with nothing SQLite- or MySQL-specific, so the same schema runs unchanged in either environment.
+
+## Structure
 
 ```
-app/Http/Controllers/HomeController.php     Renders the Home Inertia page with all content as props
+app/Http/Controllers/HomeController.php     Renders the Home page with all content as Inertia props
 app/Http/Controllers/ProjectController.php  Renders a project's case-study page at /projects/{slug}
-app/Http/Controllers/ContactController.php  Handles contact form submissions
+app/Http/Controllers/ContactController.php  Validates, stores, and emails contact-form submissions
 app/Models/{Project,ContactMessage}.php
-app/Support/PortfolioContent.php            Static content (experience, skills, services, stats) — see note below
-database/migrations, database/seeders       Schema + seed data for the four featured projects
-resources/js/Pages/Home.jsx                 Top-level home page, composes all sections
-resources/js/Pages/Projects/Show.jsx        Case-study page template (shared by all projects)
+app/Support/PortfolioContent.php            Static content (experience, skills, services, stats)
+database/migrations, database/seeders       Schema + seed data for the featured projects
+resources/js/Pages/Home.jsx                 Top-level home page, composes every section
+resources/js/Pages/Projects/Show.jsx        Case-study page template, shared across all projects
 resources/js/Components/*.jsx               Header, Hero, Skills, Projects, Contact, etc.
 resources/js/hooks/*.js                     useReveal (scroll animations), useCountUp, useTheme
-resources/css/app.css                       The full hand-built design system (dark/light theme via CSS vars)
+resources/css/app.css                       The full design system — dark/light theme via CSS vars
 ```
 
-**Why some content is in the database and some isn't:** Projects are an Eloquent model with migrations/seeders — each row holds both its portfolio-card summary and its full case-study content (as a `sections` JSON column of `{heading, body}` pairs), since that's content meant to grow over time and case studies are really just "more detail about the same project," not a separate concern. Experience, skills, services, and stats live in `App\Support\PortfolioContent` as plain PHP arrays — they're personal facts with no independent lifecycle, so a database table for them would be pure ceremony.
+**Why some content lives in the database and some doesn't:** projects are an Eloquent model because that's content meant to grow over time, and a case study is really just "more detail about the same project," not a separate concern. Experience, skills, services, and stats live in `App\Support\PortfolioContent` as plain PHP arrays — personal facts with no independent lifecycle, so a database table for them would be pure ceremony.
 
-## Projects & case studies
+---
 
-The four featured projects (Qistas, Aroma Gift Center, Maktab, Epicured) are seeded in `database/seeders/ProjectSeeder.php` with real case-study content — problem, architecture, engineering decisions, and outcome, written from the actual role/stack/architecture on each project, with no invented metrics. Qistas is marked `is_featured` and gets the large card treatment; the others render in the grid below it, ordered by `sort_order`. Each project card links to a dedicated `/projects/{slug}` page (`ProjectController@show`, route-model-bound by slug) with its own SEO title/description and prev/next navigation between projects.
+<div align="center">
 
-Project preview images are real screenshots of the live sites (`public/images/projects/*.jpg`), not mockups — update them (and `preview_image` in the seeder) if a site's design changes.
+© Mahdi Ayyad — [GitHub](https://github.com/mahdiayyad) · [LinkedIn](https://www.linkedin.com/in/mahdi-ayyad-943143201)
 
-To add a new project: add an entry to the `$projects` array in `ProjectSeeder.php` (slug, category, tagline, summary, role, architecture_summary, tech_tags, website_url, a `sections` array of `{heading, body}` pairs, `sort_order`), add its preview image to `public/images/projects/`, then `php artisan db:seed --class=ProjectSeeder`.
-
-## Local setup
-
-Requires PHP ≥ 8.2, Composer ≥ 2.2, Node ≥ 20.
-
-```bash
-composer install
-npm install
-cp .env.example .env
-php artisan key:generate
-touch database/database.sqlite
-php artisan migrate --seed
-npm run build   # or `npm run dev` for hot reload alongside `php artisan serve`
-php artisan serve
-```
-
-Run the test suite with `php artisan test` (covers the contact form's validation, storage, mail-queueing, and rate-limiting; the home page's Inertia props; and each project's case-study page, including the 404 for an unknown slug).
-
-## Before publishing — personalization checklist
-
-- [ ] **Stats** (`PortfolioContent::stats()`) — confirm "Projects Delivered" and "APIs Designed & Built" reflect real numbers. "Years Experience" and "Third-Party Integrations" are grounded in the CV as written.
-- [ ] **Mail delivery** — `MAIL_MAILER` defaults to `log` (messages land in `storage/logs/laravel.log`, nothing is actually sent). Production uses [Resend](https://resend.com) (`resend/resend-laravel` is already installed and wired via Laravel's built-in `resend` mailer). Before going live: sign up at resend.com, grab an API key, and set in `.env`:
-  ```env
-  MAIL_MAILER=resend
-  RESEND_API_KEY=re_xxxxxxxxxxxx
-  MAIL_FROM_ADDRESS=onboarding@resend.dev   # or an address on a domain you've verified in Resend
-  ```
-  Also set `QUEUE_CONNECTION=sync` (simplest — mail sends inline, no worker process to manage) or run `php artisan queue:work` as a persistent service if staying on `QUEUE_CONNECTION=database`.
-- [ ] **Canonical URL** — `resources/views/app.blade.php`'s JSON-LD `url` field is a placeholder (`https://mahdiayyad.dev/`); update it once deployed.
-- [ ] **Testimonials** — intentionally omitted until there are real ones to feature (no fabricated quotes).
-
-## Notes
-
-- Theme respects a saved preference, falling back to system `prefers-color-scheme`; toggled via `useTheme` and applied to `<html data-theme>` before first paint (inline script in `app.blade.php`) to avoid a flash of the wrong theme.
-- Icons are a single inline SVG sprite (`IconSprite.jsx`) — no icon-font/library dependency.
-- Switching from SQLite to MySQL for production is a `.env` change only (`DB_CONNECTION=mysql` + credentials) — every migration uses portable column types.
+</div>
