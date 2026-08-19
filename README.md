@@ -54,7 +54,13 @@ Run the test suite with `php artisan test` (covers the contact form's validation
 ## Before publishing — personalization checklist
 
 - [ ] **Stats** (`PortfolioContent::stats()`) — confirm "Projects Delivered" and "APIs Designed & Built" reflect real numbers. "Years Experience" and "Third-Party Integrations" are grounded in the CV as written.
-- [ ] **Mail delivery** — `MAIL_MAILER` defaults to `log` (messages land in `storage/logs/laravel.log`, nothing is actually sent). Set real SMTP/Resend/Postmark credentials in `.env` before going live, and run a queue worker (`php artisan queue:work`) or switch `QUEUE_CONNECTION` to `sync`.
+- [ ] **Mail delivery** — `MAIL_MAILER` defaults to `log` (messages land in `storage/logs/laravel.log`, nothing is actually sent). Production uses [Resend](https://resend.com) (`resend/resend-laravel` is already installed and wired via Laravel's built-in `resend` mailer). Before going live: sign up at resend.com, grab an API key, and set in `.env`:
+  ```env
+  MAIL_MAILER=resend
+  RESEND_API_KEY=re_xxxxxxxxxxxx
+  MAIL_FROM_ADDRESS=onboarding@resend.dev   # or an address on a domain you've verified in Resend
+  ```
+  Also set `QUEUE_CONNECTION=sync` (simplest — mail sends inline, no worker process to manage) or run `php artisan queue:work` as a persistent service if staying on `QUEUE_CONNECTION=database`.
 - [ ] **Canonical URL** — `resources/views/app.blade.php`'s JSON-LD `url` field is a placeholder (`https://mahdiayyad.dev/`); update it once deployed.
 - [ ] **Testimonials** — intentionally omitted until there are real ones to feature (no fabricated quotes).
 

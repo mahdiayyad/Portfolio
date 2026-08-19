@@ -70,51 +70,27 @@ class PortfolioContent
             [
                 'category' => 'Backend',
                 'icon' => 'server',
-                'items' => [
-                    ['label' => 'Laravel', 'level' => 95],
-                    ['label' => 'PHP', 'level' => 93],
-                    ['label' => 'REST APIs', 'level' => 92],
-                    ['label' => 'Authentication', 'level' => 88],
-                    ['label' => 'Queues & Events', 'level' => 85],
-                ],
+                'items' => ['Laravel', 'PHP', 'REST APIs', 'Laravel Passport', 'Authentication', 'Queues & Events'],
             ],
             [
                 'category' => 'Databases',
                 'icon' => 'database',
-                'items' => [
-                    ['label' => 'MySQL', 'level' => 90],
-                    ['label' => 'Query Optimization', 'level' => 85],
-                    ['label' => 'Database Design', 'level' => 87],
-                ],
+                'items' => ['MySQL', 'Query Optimization', 'Database Design'],
             ],
             [
                 'category' => 'Caching & Performance',
                 'icon' => 'zap',
-                'items' => [
-                    ['label' => 'Redis', 'level' => 82],
-                    ['label' => 'Caching Strategies', 'level' => 84],
-                    ['label' => 'Performance Tuning', 'level' => 83],
-                ],
+                'items' => ['Redis', 'Caching Strategies', 'Performance Tuning'],
             ],
             [
                 'category' => 'DevOps',
                 'icon' => 'terminal',
-                'items' => [
-                    ['label' => 'Git', 'level' => 92],
-                    ['label' => 'Linux', 'level' => 80],
-                    ['label' => 'Deployment & Nginx', 'level' => 78],
-                    ['label' => 'CI/CD', 'level' => 75],
-                ],
+                'items' => ['Git', 'Linux', 'Deployment & Nginx', 'CI/CD'],
             ],
             [
                 'category' => 'Frontend Knowledge',
                 'icon' => 'layout',
-                'items' => [
-                    ['label' => 'HTML & CSS', 'level' => 88],
-                    ['label' => 'JavaScript', 'level' => 78],
-                    ['label' => 'Tailwind CSS', 'level' => 80],
-                    ['label' => 'Bootstrap', 'level' => 85],
-                ],
+                'items' => ['HTML & CSS', 'JavaScript', 'Tailwind CSS', 'Bootstrap'],
             ],
         ];
     }

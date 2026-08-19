@@ -12,20 +12,13 @@ function SkillCategory({ category, icon, items }) {
                 </div>
                 <h3>{category}</h3>
             </div>
-            {items.map((item) => (
-                <div className="skill-row" key={item.label}>
-                    <div className="skill-row-top">
-                        <span>{item.label}</span>
-                        <span>{item.level}%</span>
-                    </div>
-                    <div className="skill-bar-track">
-                        <div
-                            className="skill-bar-fill"
-                            style={{ width: revealed ? `${item.level}%` : '0%' }}
-                        />
-                    </div>
-                </div>
-            ))}
+            <div className={`skill-chip-grid ${revealed ? 'is-revealed' : ''}`} data-reveal-group>
+                {items.map((item) => (
+                    <span className="skill-chip" key={item}>
+                        {item}
+                    </span>
+                ))}
+            </div>
         </div>
     );
 }

@@ -3,22 +3,22 @@ import Icon from './Icon';
 import useTheme from '../hooks/useTheme';
 
 const NAV_LINKS = [
-    { href: '#about', label: 'About' },
-    { href: '#experience', label: 'Experience' },
-    { href: '#skills', label: 'Skills' },
-    { href: '#projects', label: 'Projects' },
-    { href: '#services', label: 'Services' },
-    { href: '#contact', label: 'Contact' },
+    { id: 'about', label: 'About' },
+    { id: 'experience', label: 'Experience' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'services', label: 'Services' },
+    { id: 'contact', label: 'Contact' },
 ];
 
 export default function Header() {
     const [, toggleTheme] = useTheme();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isNavOpen, setIsNavOpen] = useState(false);
-    const [activeHash, setActiveHash] = useState('');
+    const [activeId, setActiveId] = useState('');
 
     useEffect(() => {
-        const sections = NAV_LINKS.map((link) => document.querySelector(link.href)).filter(Boolean);
+        const sections = NAV_LINKS.map((link) => document.getElementById(link.id)).filter(Boolean);
 
         const onScroll = () => {
             setIsScrolled(window.scrollY > 24);
@@ -28,7 +28,7 @@ export default function Header() {
             sections.forEach((section) => {
                 if (section.offsetTop <= scrollPos) current = section;
             });
-            setActiveHash(current ? `#${current.id}` : '');
+            setActiveId(current ? current.id : '');
         };
 
         window.addEventListener('scroll', onScroll, { passive: true });
@@ -41,7 +41,7 @@ export default function Header() {
     return (
         <header id="header" className={isScrolled ? 'is-scrolled' : ''}>
             <div className="container header-inner">
-                <a href="#hero" className="logo">
+                <a href="/#hero" className="logo">
                     <span className="logo-mark">MA</span>
                     <span>Mahdi Ayyad</span>
                 </a>
@@ -49,10 +49,10 @@ export default function Header() {
                 <nav className={`nav-menu ${isNavOpen ? 'is-open' : ''}`} id="navMenu" aria-label="Primary">
                     <ul>
                         {NAV_LINKS.map((link) => (
-                            <li key={link.href}>
+                            <li key={link.id}>
                                 <a
-                                    href={link.href}
-                                    className={`nav-link ${activeHash === link.href ? 'active' : ''}`}
+                                    href={`/#${link.id}`}
+                                    className={`nav-link ${activeId === link.id ? 'active' : ''}`}
                                     onClick={closeNav}
                                 >
                                     {link.label}
@@ -67,7 +67,7 @@ export default function Header() {
                         <Icon name="sun" className="icon-sun" />
                         <Icon name="moon" className="icon-moon" />
                     </button>
-                    <a href="#contact" className="btn btn-primary btn-sm header-cta">
+                    <a href="/#contact" className="btn btn-primary btn-sm header-cta">
                         Hire Me
                     </a>
                     <button
